@@ -5,12 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>FHIR Height and Weight</title>
-    <script src="data.json"></script>
+    <title>FHIR Anxiety Observation</title>
+    <script src="jsondata.json"></script>
 
     <script>
-        // condition.js
-
         var conditionObj = {
             "resourceType": "Observation",
             "status": "final",
@@ -18,14 +16,14 @@
                 "coding": [
                     {
                         "system": "http://loinc.org",
-                        "code": "XXX",
-                        "display": "心律"
+                        "code": "12345-6",
+                        "display": "焦慮症"
                     }
                 ],
-                "text": "心律"
+                "text": "焦慮症"
             },
             "subject": {
-                "reference": "Patient/11450680"
+                "reference": "Patient/25016582"
             },
             "effectiveDateTime": "2023-10-17T08:00:00Z",
             "component": [
@@ -35,47 +33,28 @@
                             {
                                 "system": "http://loinc.org",
                                 "code": "8302-2",
-                                "display": "心律"
+                                "display": "中度焦慮"
                             }
                         ],
-                        "text": "心律"
+                        "text": "中度焦慮"
                     },
                     "valueQuantity": {
-                        "value": 0,  // 心律的初始值
-                        "unit": "bpm",
+                        "value": 0,  // 初始值
+                        "unit": "cm",
                         "system": "http://unitsofmeasure.org",
-                        "code": "bpm"
-                    }
-                },
-                {
-                    "code": {
-                        "coding": [
-                            {
-                                "system": "http://loinc.org",
-                                "code": "29463-7",
-                                "display": "血壓"
-                            }
-                        ],
-                        "text": "血壓"
-                    },
-                    "valueQuantity": {
-                        "value": 0,  // 血壓的初始值
-                        "unit": "mmHg",
-                        "system": "http://unitsofmeasure.org",
-                        "code": "mmHg"
+                        "code": "cm"
                     }
                 }
             ]
         }
 
         function postData() {
-            // 更新身高和體重的值
-            conditionObj.component[0].valueQuantity.value = parseFloat(document.getElementById("height").value);
-            conditionObj.component[0].valueQuantity.value = parseFloat(document.getElementById("blood").value);
+            // 更新中度焦慮的值
+            conditionObj.component[0].valueQuantity.value = parseFloat(document.getElementById("anxietyLevel").value);
 
             var jsonStr = JSON.stringify(conditionObj);
             var FHIRrootURL = "https://hapi.fhir.org/baseR4/";
-            var apiURL = FHIRrootURL + "Observation?subject=11450680";
+            var apiURL = FHIRrootURL + "Observation?subject=25016582";
             HTTPGetData(apiURL, jsonStr);
         }
 
@@ -110,16 +89,15 @@
 
 <body>
 
-    <h1>心律上傳</h1>
+    <h1>焦慮症</h1>
 
     <form id="observationForm">
-        <p>請上傳心律</p>
+        <p>請上傳焦慮程度</p>
 
-        <label for="height">心律 (bpm):</label>
-        <input type="number" id="height" step="0.1" />
+        <label for="anxietyLevel">焦慮程度:</label>
+        <input type="number" id="anxietyLevel" step="0.1" /><br /><br />
 
-        <label for="blood">血壓 (mmHg):</label>
-        <input type="number" id="blood" step="0.1" />
+        <p></p>
         <button type="button" onclick="postData()">上傳</button><br /><br />
     </form>
 </body>
